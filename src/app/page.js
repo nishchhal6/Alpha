@@ -3,24 +3,44 @@
 import { useState } from "react";
 import ImageCarousel from "./components/ImageCarousel";
 import Modal from "./components/Modal";
+import GalleryModal from "./components/GalleryModal";
+
+import tharImage1 from "../../public/images/thar1.jpg";
+import tharImage2 from "../../public/images/thar2.jpg";
+import tharImage3 from "../../public/images/thar3.jpg";
+import tharImage4 from "../../public/images/thar4.jpg";
+
+const localImages = [
+  { id: 1, src: tharImage1 },
+  { id: 2, src: tharImage2 },
+  { id: 3, src: tharImage3 },
+  { id: 4, src: tharImage4 },
+];
 
 export default function HomePage() {
   const [invites, setInvites] = useState(50);
   const [duration, setDuration] = useState(6);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [galleryStartIndex, setGalleryStartIndex] = useState(0);
 
   const calculatedValue = invites * 100 + duration * 500;
+
+  const openGallery = (index) => {
+    setGalleryStartIndex(index);
+    setIsGalleryOpen(true);
+  };
 
   return (
     <>
       <main className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-8">
           <div className="lg:col-span-3">
-            {/* Modal kholne wala function pass karein */}
-            <ImageCarousel onOpenModal={() => setIsModalOpen(true)} />
+            <ImageCarousel
+              onOpenModal={() => setIsModalOpen(true)}
+              onOpenGallery={openGallery}
+            />
           </div>
-
-          {/* Right Column (Ismein koi change nahi hai) */}
           <div className="lg:col-span-2 flex flex-col gap-8">
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h1 className="text-2xl font-bold text-slate-900">
@@ -47,7 +67,6 @@ export default function HomePage() {
                 ₹13.26 Lakh
               </p>
             </div>
-
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-bold text-slate-900">
                 Price Calculator
@@ -115,13 +134,18 @@ export default function HomePage() {
           </div>
         </div>
       </main>
-
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <h2 className="text-2xl font-bold">360° Interactive View</h2>
+        <h2 className="text-2xl font-bold">360 Interactive View</h2>
         <p className="text-gray-600 mt-2">
-          This is a placeholder for the 360° viewer.
+          This is a placeholder for the 360 viewer.
         </p>
       </Modal>
+      <GalleryModal
+        isOpen={isGalleryOpen}
+        onClose={() => setIsGalleryOpen(false)}
+        images={localImages}
+        startIndex={galleryStartIndex}
+      />
     </>
   );
 }
